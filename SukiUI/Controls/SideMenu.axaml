@@ -1,0 +1,59 @@
+<Styles xmlns="https://github.com/avaloniaui"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:controls="using:Alvz.Avalonia.Desktop"
+					xmlns:suki="using:SukiUI.Controls">
+
+
+  <!-- Add Styles Here -->
+	<Style Selector="controls|SideMenu">
+		<Setter Property="Template">
+			<ControlTemplate>
+				<SplitView DisplayMode="CompactInline"
+						   IsPaneOpen="False"
+						   CompactPaneLength="73">
+					<SplitView.Pane>
+						<Border>
+							<Grid Background="Transparent">
+								<suki:GlassCard Name="Glass"
+												BorderThickness="0"
+												CornerRadius="0"/>
+								<DockPanel LastChildFill="True">
+								
+									<Grid MinHeight="{TemplateBinding HeaderMinHeight}"
+											DockPanel.Dock="Top">
+										<ContentControl Content="{TemplateBinding HeaderContent}" />
+									</Grid>
+									<!--
+									<ContentControl Margin="0,0,0,12"
+													Content="{TemplateBinding FooterContent}"
+													DockPanel.Dock="Bottom"
+													IsVisible="{TemplateBinding IsMenuExpanded}" /> -->
+
+									<ScrollViewer Name="PART_ScrollViewer"
+													AllowAutoHide="True"
+													Background="{TemplateBinding Background}"
+													BringIntoViewOnFocusChange="{TemplateBinding (ScrollViewer.BringIntoViewOnFocusChange)}"
+													IsScrollChainingEnabled="{TemplateBinding (ScrollViewer.IsScrollChainingEnabled)}"
+													VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}"
+													VerticalSnapPointsType="{TemplateBinding (ScrollViewer.VerticalSnapPointsType)}">
+										<ItemsPresenter Name="PART_ItemsPresenter"
+														Margin="{TemplateBinding Padding}"
+														ItemsPanel="{TemplateBinding ItemsPanel}" />
+									</ScrollViewer>
+
+								</DockPanel>
+							</Grid>
+						</Border>
+					</SplitView.Pane>
+					<Border Name="ContentBorder"
+                            Margin="0,0,0,0"
+                            Background="{DynamicResource SukiBackground}"
+                            BorderBrush="{DynamicResource SukiBorderBrush}"
+                            BorderThickness="1,0,0,0">
+						<suki:SukiTransitioningContentControl Name="PART_TransitioningContentControl" />
+					</Border>
+				</SplitView>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+</Styles>

@@ -1,0 +1,80 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:controls="using:Alvz.Avalonia.Desktop"
+		xmlns:suki="using:SukiUI.Controls">
+	<Design.PreviewWith>
+		<controls:SideMenuItem Header="Fornecedor" Icon="{controls:IconGeometry Basket} "/>
+	</Design.PreviewWith>
+
+	<!-- Add Styles Here -->
+	<Style Selector="controls|SideMenuItem">
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Border Name="PART_Border"
+                        Width="64"
+						Height="58"
+                        Padding="2"
+                        Background="Transparent"
+						BorderBrush="Transparent"
+						CornerRadius="5">
+					<Border.Transitions>
+						<Transitions>
+							<BrushTransition Property="Background" Duration="0:0:0.35" />
+							<ThicknessTransition Property="Padding" Duration="0:0:0.35" />
+						</Transitions>
+					</Border.Transitions>
+					<Grid>
+						<DockPanel Name="PART_NormalDisplay" LastChildFill="True">
+							<TextBlock Name="PART_Header"
+                                       VerticalAlignment="Center"
+									   HorizontalAlignment="Center"
+                                       FontSize="11"
+                                       IsVisible="{Binding IsMenuExpanded, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type controls:SideMenu}}}"
+                                       Text="{TemplateBinding Header}"
+									   DockPanel.Dock="Bottom"/>
+							<PathIcon Name="PART_Icon"
+                                            Width="30"
+                                            Height="30"
+                                            Data="{TemplateBinding Icon}"
+                                            DockPanel.Dock="Top">
+								<PathIcon.Transitions>
+									<Transitions>
+										<DoubleTransition Property="Opacity" Duration="0:0:0.3" />
+									</Transitions>
+								</PathIcon.Transitions>
+							</PathIcon>
+						</DockPanel>
+
+						<!--
+						<ContentPresenter Name="PART_AltDisplay"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}" /> -->
+
+					</Grid>
+				</Border>
+			</ControlTemplate>
+		</Setter>
+		<Style Selector="^:pointerover">
+			<Style Selector="^ /template/ Border#PART_Border">
+				<Setter Property="Background" Value="{DynamicResource SukiPrimaryColor2}" />
+			</Style>
+		</Style>
+		<Style Selector="^[IsSelected=True]">
+			<Style Selector="^ /template/ Border#PART_Border">
+				<Setter Property="Background" Value="{DynamicResource SukiPrimaryColor5}" />
+				<Setter Property="Padding" Value="-10,15,15,15" />
+			</Style>
+			<Style Selector="^ /template/ TextBlock#PART_Header">
+				<Setter Property="FontWeight" Value="Bold" />
+				<Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor}" />
+			</Style>
+			<Style Selector="^ /template/ PathIcon#Part_SelectedIcon">
+				<Setter Property="Opacity" Value="1" />
+			</Style>
+			<Style Selector="^ /template/ ContentControl#PART_Icon">
+				<Setter Property="Foreground" Value="{DynamicResource SukiAccentColor}" />
+				<Setter Property="Opacity" Value="0" />
+			</Style>
+		</Style>
+	</Style>
+</Styles>

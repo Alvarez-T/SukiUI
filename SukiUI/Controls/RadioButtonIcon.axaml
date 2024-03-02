@@ -1,0 +1,15 @@
+<Styles xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:controls="using:Alvz.Avalonia.Desktop">
+	<Design.PreviewWith>
+		<controls:RadioButtonIcon />
+	</Design.PreviewWith>
+
+	<Style Selector="controls|RadioButtonIcon">
+		<Setter Property="Template">
+			<ControlTemplate>
+
+			</ControlTemplate>
+		</Setter>
+	</Style>
+</Styles>

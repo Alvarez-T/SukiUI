@@ -69,4 +69,22 @@
 	  <UpToDateCheckInput Remove="Controls\TouchInput\TouchNumericPad\TouchNumericPad.axaml" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Update="Controls\RadioButtonIcon.axaml.cs">
+	    <DependentUpon>%(Filename)</DependentUpon>
+	  </Compile>
+	  <Compile Update="Controls\SideMenu.axaml.cs">
+	    <DependentUpon>%(Filename)</DependentUpon>
+	  </Compile>
+	  <Compile Update="Controls\SideMenuItem.axaml.cs">
+	    <DependentUpon>%(Filename)</DependentUpon>
+	  </Compile>
+	  <Compile Update="Controls\SideSubMenu.axaml.cs">
+	    <DependentUpon>%(Filename)</DependentUpon>
+	  </Compile>
+	  <Compile Update="Controls\ToggleButtonIcon.axaml.cs">
+	    <DependentUpon>%(Filename)</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
 </Project>
