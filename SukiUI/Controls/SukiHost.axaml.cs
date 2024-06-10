@@ -14,7 +14,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
+using Avalonia.Media;
+using Avalonia.Rendering.Composition;
+using Avalonia.Rendering.Composition.Animations;
 using Avalonia.VisualTree;
+using SukiUI.Content;
 
 namespace SukiUI.Controls;
 
@@ -23,6 +27,9 @@ namespace SukiUI.Controls;
 /// </summary>
 public class SukiHost : ContentControl
 {
+    
+  
+
     protected override Type StyleKeyOverride => typeof(SukiHost);
 
     public static readonly StyledProperty<bool> IsDialogOpenProperty =
@@ -107,7 +114,17 @@ public class SukiHost : ContentControl
             toastLoc == ToastLocation.BottomLeft
                 ? HorizontalAlignment.Left
                 : HorizontalAlignment.Right;
+        
+        var b = e.NameScope.Get<Border>("PART_DialogBackground");
+        b.Loaded += (sender, args) =>
+        {
+            var v = ElementComposition.GetElementVisual(b);
+            CompositionAnimationHelper.MakeOpacityAnimated(v, 400);
+        }; 
+        
+     
     }
+    
 
     // TODO: Dialog API desperately needs to support a result or on-close callback.
     // TODO: Toasts and dialogs should be dragged out into their own discrete service and provided by a higher level service locator.
@@ -144,6 +161,47 @@ public class SukiHost : ContentControl
     /// <param name="allowBackgroundClose">Allows the dialog to be closed by clicking outside of it.</param>
     public static void ShowDialog(object? content, bool showCardBehind = true, bool allowBackgroundClose = false) =>
         ShowDialog(_mainWindow, content, showCardBehind, allowBackgroundClose);
+
+    public static void ShowMessageBox(MessageBoxModel model, bool allowbackgroundclose = true)
+    {
+        
+        
+        SukiHost.ShowDialog(new MessageBox(){
+            _onActionCallback = model.ActionButton,
+            Title = model.Title, Content = model.Content, ShowActionButton = model.ActionButtonContent != null, 
+            ActionButtonContent = model.ActionButtonContent, 
+            Icon = model.Type switch
+            {
+                NotificationType.Info => Icons.InformationOutline,
+                NotificationType.Success => Icons.Check,
+                NotificationType.Warning => Icons.AlertOutline,
+                NotificationType.Error => Icons.AlertOutline,
+                _ => Icons.InformationOutline
+            }
+            , Foreground = model.Type switch
+            {
+                NotificationType.Info => SukiHost.GetGradient(Color.FromRgb(47,84,235)),
+                NotificationType.Success => SukiHost.GetGradient(Color.FromRgb(82,196,26)),
+                NotificationType.Warning => SukiHost.GetGradient(Color.FromRgb(240,140,22)),
+                NotificationType.Error => SukiHost.GetGradient(Color.FromRgb(245,34,45)),
+                _ => SukiHost.GetGradient(Color.FromRgb(89,126,255))
+            }}, false, allowbackgroundclose);
+
+    }
+
+    private static LinearGradientBrush GetGradient(Color c1)
+    {
+        return new LinearGradientBrush()
+        {
+            StartPoint = new RelativePoint(0, 0, RelativeUnit.Relative),
+            EndPoint = new RelativePoint(1, 1, RelativeUnit.Relative),
+            GradientStops =
+            {
+                new GradientStop(){Color = c1, Offset = 0},
+                new GradientStop(){Color = Color.FromArgb(140, c1.R,c1.G,c1.B), Offset = 1}
+            }
+        };
+    }
     
     /// <summary>
     /// Attempts to close a dialog if one is shown in a specific window.
@@ -153,6 +211,7 @@ public class SukiHost : ContentControl
         if (!Instances.TryGetValue(window, out var host))
             throw new InvalidOperationException("No SukiHost present in this window");
         host.IsDialogOpen = false;
+       
     }
 
     /// <summary>
@@ -176,22 +235,25 @@ public class SukiHost : ContentControl
     /// <param name="window">The window who's SukiHost should be used to display the toast.</param>
     /// <param name="model">A pre-constructed <see cref="SukiToastModel"/>.</param>
     /// <exception cref="InvalidOperationException">Thrown if there is no SukiHost associated with the specified window.</exception>
-    public static async Task ShowToast(Window window, SukiToastModel model)
+    public static async Task ShowToast(Window window, ToastModel model)
     {
-        if (!Instances.TryGetValue(window, out var host))
-            throw new InvalidOperationException("No SukiHost present in this window");
-        
-        var toast = SukiToastPool.Get();
-        toast.Initialize(model, host);
-        if (host.ToastsCollection.Count >= host._maxToasts)
-            await ClearToast(host.ToastsCollection.First());
-        Dispatcher.UIThread.Invoke(() =>
+        try
         {
-            host.ToastsCollection.Add(toast);
-            toast.Animate(OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(500));
-            toast.Animate(MarginProperty, new Thickness(0, 10, 0, -10), new Thickness(),
-                TimeSpan.FromMilliseconds(500));
-        });
+            if (!Instances.TryGetValue(window, out var host))
+                throw new InvalidOperationException("No SukiHost present in this window");
+
+            var toast = ToastPool.Get();
+            toast.Initialize(model, host);
+            if (host.ToastsCollection.Count >= host._maxToasts)
+                await ClearToast(host.ToastsCollection.First());
+            Dispatcher.UIThread.Invoke(() =>
+            {
+                host.ToastsCollection.Add(toast);
+                toast.Animate(OpacityProperty, 0d, 1d, TimeSpan.FromMilliseconds(500));
+                toast.Animate(MarginProperty, new Thickness(0, 10, 0, -10), new Thickness(),
+                    TimeSpan.FromMilliseconds(500));
+            });
+        }catch{}
     }
     
     /// <summary>
@@ -199,21 +261,23 @@ public class SukiHost : ContentControl
     /// This method will show the toast in the earliest opened window.
     /// </summary>
     /// <param name="model">A pre-constructed <see cref="SukiToastModel"/>.</param>
-    public static Task ShowToast(SukiToastModel model) => 
+    public static Task ShowToast(ToastModel model) => 
         ShowToast(_mainWindow, model);
-    
+
     /// <summary>
     /// <inheritdoc cref="ShowToast(Window, SukiToastModel)"/>
     /// This method will show the toast in the earliest opened window.
     /// </summary>
     /// <param name="title">The title to display in the toast.</param>
     /// <param name="content">The content of the toast, this can be any control or ViewModel.</param>
+    /// <param name="type">The type of the toast, including Info, Success, Warning and Error</param>
     /// <param name="duration">Duration for this toast to be active. Default is 2 seconds.</param>
     /// <param name="onClicked">A callback that will be fired if the Toast is cleared by clicking.</param>
-    public static Task ShowToast(string title, object content, TimeSpan? duration = null, Action? onClicked = null) =>
-        ShowToast(new SukiToastModel(
+    public static Task ShowToast(string title, object content, NotificationType? type = NotificationType.Info, TimeSpan? duration = null, Action? onClicked = null) =>
+        ShowToast(new ToastModel(
             title,
             content as Control ?? ViewLocator.TryBuild(content),
+            type ?? NotificationType.Info,
             duration ?? TimeSpan.FromSeconds(4),
             onClicked));
 
@@ -224,13 +288,15 @@ public class SukiHost : ContentControl
     /// <param name="window">The window who's SukiHost should be used to display the toast.</param>
     /// <param name="title">The title to display in the toast.</param>
     /// <param name="content">The content of the toast, this can be any control or ViewModel.</param>
+    /// <param name="type">The type of the toast, including Info, Success, Warning and Error</param>
     /// <param name="duration">Duration for this toast to be active. Default is 2 seconds.</param>
     /// <param name="onClicked">A callback that will be fired if the Toast is cleared by clicking.</param>
-    public static Task ShowToast(Window window, string title, object content, TimeSpan? duration = null,
+    public static Task ShowToast(Window window, string title, object content, NotificationType? type = NotificationType.Info, TimeSpan? duration = null,
         Action? onClicked = null) =>
-        ShowToast(window, new SukiToastModel(
+        ShowToast(window, new ToastModel(
             title,
             content as Control ?? ViewLocator.TryBuild(content),
+            type ?? NotificationType.Info,
             duration ?? TimeSpan.FromSeconds(4),
             onClicked));
 
@@ -253,7 +319,7 @@ public class SukiHost : ContentControl
         });
 
         if (!wasRemoved) return;
-        SukiToastPool.Return(toast);
+        ToastPool.Return(toast);
     }
 
     /// <summary>
@@ -263,7 +329,7 @@ public class SukiHost : ContentControl
     {
         if (!Instances.TryGetValue(window, out var host))
             throw new InvalidOperationException("No SukiHost present in this window");
-        SukiToastPool.Return(host.ToastsCollection);
+        ToastPool.Return(host.ToastsCollection);
         Dispatcher.UIThread.Invoke(() => host.ToastsCollection.Clear());
     }
 

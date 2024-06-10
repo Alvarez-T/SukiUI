@@ -21,23 +21,35 @@
 		<LangVersion>10</LangVersion>
 		<UserSecretsId>712f85e4-12d3-41b0-a417-5714a113666f</UserSecretsId>
 		<Description>https://github.com/kikipoulet/SukiUI</Description>
-		<PackageVersion>5.1.2</PackageVersion>
+		<PackageVersion>6.0.0</PackageVersion>
 		<Nullable>enable</Nullable>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<PackageIcon>OIG.N5o-removebg-preview.png</PackageIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Avalonia" Version="11.0.5" />
-		<PackageReference Include="Avalonia.Skia" Version="11.0.5" />
-		<PackageReference Include="SkiaSharp" Version="2.88.6" />
-		<PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.5" />
-		<PackageReference Include="Avalonia.Themes.Simple" Version="11.0.5" />
-		<PackageReference Include="ReactiveUI" Version="19.2.1" />
+		<PackageReference Include="Avalonia" Version="11.1.0-beta2" />
+		<PackageReference Include="Avalonia.Skia" Version="11.1.0-beta2" />
+		<PackageReference Include="SkiaSharp" Version="2.88.8" />
+		<PackageReference Include="Avalonia.Controls.DataGrid" Version="11.1.0-beta2" />
+		<PackageReference Include="Avalonia.Themes.Simple" Version="11.1.0-beta2" />
+		<PackageReference Include="ReactiveUI" Version="19.6.12" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<AvaloniaResource Include="**\*.xaml" />
+		<AvaloniaResource Include="Content\Images\icons8-file-explorer-new-48.png" />
+		<None Remove="CustomFont\MiSans\MiSansLatin-Bold.ttf" />
+	
+		<None Remove="CustomFont\MiSans\MiSansLatin-Demibold.ttf" />
+		<None Remove="CustomFont\MiSans\MiSansLatin-ExtraLight.ttf" />
+		<None Remove="CustomFont\MiSans\MiSansLatin-Heavy.ttf" />
+		<None Remove="CustomFont\MiSans\MiSansLatin-Light.ttf" />
+		<None Remove="CustomFont\MiSans\MiSansLatin-Medium.ttf" />
+		<None Remove="CustomFont\MiSans\MiSansLatin-Normal.ttf" />
+		<None Remove="CustomFont\MiSans\MiSansLatin-Regular.ttf" />
+		<None Remove="CustomFont\MiSans\MiSansLatin-Semibold.ttf" />
+		<None Remove="CustomFont\MiSans\MiSansLatin-Thin.ttf" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -48,17 +60,12 @@
 		<AvaloniaResource Include="CustomFont\Quicksand-Medium.ttf" />
 		<AvaloniaResource Include="CustomFont\Quicksand-Regular.ttf" />
 		<AvaloniaResource Include="CustomFont\Quicksand-SemiBold.ttf" />
-		<Content Include="suki_photo.ico" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Content Include="..\LICENSE" Link="LICENSE" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <None Update="OIG.N5o-removebg-preview.png">
 	    <Pack>True</Pack>
-	    <PackagePath></PackagePath>
+	    <PackagePath />
 	  </None>
 	</ItemGroup>
 
@@ -67,6 +74,13 @@
 	  <UpToDateCheckInput Remove="Controls\TouchInput\TouchKeyboard\TouchKeyboardPopUp.axaml" />
 	  <UpToDateCheckInput Remove="Controls\TouchInput\TouchNumericPad\NumericPadPopUp.axaml" />
 	  <UpToDateCheckInput Remove="Controls\TouchInput\TouchNumericPad\TouchNumericPad.axaml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Controls\WaveProgress.axaml.cs">
+	    <DependentUpon>WaveProgress.axaml</DependentUpon>
+	    <SubType>Code</SubType>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>

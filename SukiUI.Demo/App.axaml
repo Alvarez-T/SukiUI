@@ -16,15 +16,22 @@
         </ResourceDictionary>
     </Application.Resources>
     <Application.Styles>
-        <FluentTheme />
+    <FluentTheme></FluentTheme>
+        
+        <StyleInclude Source="avares://SukiUI.Dock/Index.axaml" />
+        
         <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
         <StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml" />
-        <sukiUi:SukiTheme ThemeColor="Red" />
+        <sukiUi:SukiTheme ThemeColor="Blue"/>
         <StyleInclude Source="avares://SukiUI.Demo/Styles/ShowMeTheXamlStyles.axaml" />
         <StyleInclude Source="avares://SukiUI.Demo/Styles/WrapPanelStyles.axaml" />
         <StyleInclude Source="avares://SukiUI.Demo/Styles/TextStyles.axaml" />
         <StyleInclude Source="avares://SukiUI.Demo/Styles/GlassCardStyles.axaml" />
         <avalonia:MaterialIconStyles />
+        
+        <!--
+        <StyleInclude Source="avares://SukiUI/CustomFont/MiSans/ChineseSupport.axaml"></StyleInclude>
+        -->
     </Application.Styles>
 
 </Application>
