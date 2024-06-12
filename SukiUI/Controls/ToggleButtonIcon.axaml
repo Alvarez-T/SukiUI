@@ -1,8 +1,9 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		xmlns:suki="using:SukiUI.Controls">
+		xmlns:suki="using:SukiUI.Controls"
+		xmlns:extensions="clr-namespace:SukiUI.Extensions">
 	<Design.PreviewWith>
-		<suki:ToggleButtonIcon Content="test" Icon="{suki:IconGeometry AboutCircle}" />
+		<suki:ToggleButtonIcon Content="test" Icon="{extensions:IconGeometry AboutCircle}" />
 	</Design.PreviewWith>
 
 	<Style Selector="suki|ToggleButtonIcon">

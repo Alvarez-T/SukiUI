@@ -1,9 +1,9 @@
-﻿using Avalonia.Markup.Xaml;
-using Material.Icons.Avalonia;
-using Material.Icons;
+﻿using System;
+using Avalonia.Markup.Xaml;
 using Avalonia.Media;
+using Material.Icons;
 
-namespace Alvz.Avalonia.Desktop;
+namespace SukiUI.Extensions;
 
 public class IconGeometryExtension : MarkupExtension
 {

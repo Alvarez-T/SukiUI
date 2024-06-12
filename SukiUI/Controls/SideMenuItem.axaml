@@ -1,9 +1,10 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:controls="using:Alvz.Avalonia.Desktop"
-		xmlns:suki="using:SukiUI.Controls">
+		xmlns:suki="using:SukiUI.Controls"
+		xmlns:extensions="clr-namespace:SukiUI.Extensions">
 	<Design.PreviewWith>
-		<controls:SideMenuItem Header="Fornecedor" Icon="{controls:IconGeometry Basket} "/>
+		<controls:SideMenuItem Header="Fornecedor" Icon="{extensions:IconGeometry Basket} "/>
 	</Design.PreviewWith>
 
 	<!-- Add Styles Here -->
